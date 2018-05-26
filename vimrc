@@ -41,6 +41,7 @@ Plug 'roxma/nvim-cm-racer'
 
 " Terminal Vim with 256 colors colorscheme
 Plug 'fisadev/fisa-vim-colorscheme'
+Plug 'sheerun/vim-wombat-scheme'
 
 " Better file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
