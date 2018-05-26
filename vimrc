@@ -9,8 +9,13 @@ let vim_plug_path = expand('~/.vim/autoload/plug.vim')
 if !filereadable(vim_plug_path)
     echo "Installing Vim-plug..."
     echo ""
-    silent !mkdir -p ~/.vim/autoload
-    silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    if has('nvim')
+        silent !mkdir -p ~/.config/nvim/autoload
+        silent !curl -fLo ~/.config/nvim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    else
+        silent !mkdir -p ~/.vim/autoload
+        silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    endif
     let vim_plug_just_installed = 1
 endif
 
@@ -48,20 +53,22 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 " Language Server Protocol (LSP) support for vim and neovim.
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-"Plug 'autozimu/LanguageClient-neovim', {
-"    \ 'branch': 'next',
-"    \ 'do': 'bash install.sh',
-"    \ }
-"
-"" (Optional) Multi-entry selection UI.
-"Plug 'junegunn/fzf'
-"
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
 
-" Completor
-Plug 'maralla/completor.vim'
+" (Optional) Multi-entry selection UI.
+Plug 'junegunn/fzf'
+
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+
+" The completor
+if has('nvim')
+    Plug 'roxma/nvim-completion-manager'
+else
+    Plug 'maralla/completor.vim'
+endif
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -172,7 +179,12 @@ set backup                        " make backup files
 set backupdir=~/.vim/dirs/backups " where to put backup files
 set undofile                      " persistent undos - undo after you re-open the file
 set undodir=~/.vim/dirs/undos
-set viminfo+=n~/.vim/dirs/viminfo
+
+if has('nvim')
+    set viminfo+=n~/.config/nvim/dirs/viminfo
+else
+    set viminfo+=n~/.vim/dirs/viminfo
+endif
 
 "" store yankring history file there too
 "let g:yankring_history_dir = '~/.vim/dirs/'
@@ -215,57 +227,34 @@ let g:airline_theme = 'bubblegum'
 let g:airline#extensions#whitespace#enabled = 0
 
 " Language Server Protocol
-"" a basic set up for LanguageClient-Neovim
-"" << LSP >> {{{
-"let g:LanguageClient_autoStart = 0
-"nnoremap <leader>lcs :LanguageClientStart<CR>
-"" if you want it to turn on automatically
-"" let g:LanguageClient_autoStart = 1
-"
-"let g:LanguageClient_serverCommands = {
-"    \ 'python': ['pyls'],
-"    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-"    \ 'go': ['go-langserver'] }
-"let g:LanguageClient_loggingLevel = 'DEBUG'
-"
-"noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
-"noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
-"noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
-"noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
-"" }}}
-if executable('pyls')
-    " pip install python-language-server
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'pyls',
-        \ 'cmd': {server_info->['pyls']},
-        \ 'whitelist': ['python'],
-        \ })
-endif
-if executable('go-langserver')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'go-langserver',
-        \ 'cmd': {server_info->['go-langserver', '-mode', 'stdio']},
-        \ 'whitelist': ['go'],
-        \ })
-endif
-if executable('rls')
-    au User lsp_setup call lsp#register_server({
-        \ 'name': 'rls',
-        \ 'cmd': {server_info->['rustup', 'run', 'nightly', 'rls']},
-        \ 'whitelist': ['rust'],
-        \ })
-endif
+" a basic set up for LanguageClient-Neovim
+" << LSP >> {{{
+let g:LanguageClient_autoStart = 0
+nnoremap <leader>lcs :LanguageClientStart<CR>
+" if you want it to turn on automatically
+" let g:LanguageClient_autoStart = 1
 
-" Completor
+let g:LanguageClient_serverCommands = {
+    \ 'python': ['pyls'],
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'go': ['go-langserver'] }
 
-" Use tab to select completion
+noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
+noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
+noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
+noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
+" }}}
+
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
+if !has('nvim')
+    " Use tab to select completion
+    inoremap <expr> <cr> pumvisible() ? "\<C-y>\<cr>" : "\<cr>"
 
-" use tab to trigger completion (disable auto trigger)
-let g:completor_auto_trigger = 0
-inoremap <expr> <Tab> pumvisible() ? "<C-N>" : "<C-R>=completor#do('complete')<CR>"
+    "" use tab to trigger completion (disable auto trigger)
+    "let g:completor_auto_trigger = 0
+    "inoremap <expr> <Tab> pumvisible() ? "<C-N>" : "<C-R>=completor#do('complete')<CR>"
+endif
 
 " RustLang -----------------------------
 " automatic rustfmt on save
