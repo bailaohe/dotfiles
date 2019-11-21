@@ -49,8 +49,7 @@ Plug 'roxma/nvim-cm-racer'
 Plug 'fatih/vim-go'
 
 " Terminal Vim with 256 colors colorscheme
-Plug 'fisadev/fisa-vim-colorscheme'
-Plug 'sheerun/vim-wombat-scheme'
+Plug 'morhetz/gruvbox'
 
 " Better file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -66,12 +65,13 @@ Plug 'fisadev/vim-ctrlp-cmdpalette'
 " Airline
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'tpope/vim-fugitive'
 
-" Language Server Protocol (LSP) support for vim and neovim.
-Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
+"" Language Server Protocol (LSP) support for vim and neovim.
+"Plug 'autozimu/LanguageClient-neovim', {
+"    \ 'branch': 'next',
+"    \ 'do': 'bash install.sh',
+"    \ }
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
@@ -79,7 +79,14 @@ Plug 'junegunn/fzf'
 " The completor
 if has('nvim')
     Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'roxma/nvim-completion-manager'
+    Plug 'deoplete-plugins/deoplete-jedi'
+    let g:deoplete#enable_at_startup = 1
+    let g:deoplete#sources#jedi#show_docstring = 1
+
+    Plug 'zchee/deoplete-go', { 'do': 'make'}
+    " deoplete-go settings
+    let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+    let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
 else
     Plug 'maralla/completor.vim'
 endif
@@ -230,7 +237,8 @@ syntax on
 " use 256 colors when possible
 if (&term =~? 'mlterm\|xterm\|xterm-256\|screen-256') || has('nvim')
 	let &t_Co = 256
-    colorscheme fisa
+    colorscheme gruvbox
+    set background=dark
 else
     colorscheme delek
 endif
@@ -528,7 +536,8 @@ nmap <leader>v :vsp $MYVIMRC<cr>
 " Tagbar -----------------------------
 
 " toggle tagbar display
-map <F4> :TagbarToggle<CR>
+nmap <F4> :TagbarToggle<CR>
+nmap <leader>O :TagbarToggle<CR>
 " autofocus on tagbar open
 let g:tagbar_autofocus = 1
 
@@ -546,7 +555,7 @@ let NERDTreeShowLineNumbers = 1
 let NERDTreeAutoCenter = 1
 
 "" Open NERDTree on startup, when no file has been specified
-"autocmd VimEnter * if !argc() | NERDTree | endif
+" autocmd VimEnter * NERDTree
 
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
@@ -554,34 +563,34 @@ map <leader>T :NERDTreeFind<cr>
 " Toogle on/off
 nmap <leader>o :NERDTreeToggle<cr>
 
-
 " toggle nerdtree display
 map <F3> :NERDTreeToggle<CR>
 
 " Airline ------------------------------
 
-let g:airline_powerline_fonts = 0
+let g:airline_powerline_fonts = 1
 let g:airline_theme = 'bubblegum'
 let g:airline#extensions#whitespace#enabled = 0
 
-" Language Server Protocol
-" a basic set up for LanguageClient-Neovim
-" << LSP >> {{{
-let g:LanguageClient_autoStart = 0
-nnoremap <leader>lcs :LanguageClientStart<CR>
-" if you want it to turn on automatically
-" let g:LanguageClient_autoStart = 1
-
-let g:LanguageClient_serverCommands = {
-    \ 'python': ['pyls'],
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'go': ['go-langserver'] }
-
-noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
-noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
-noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
-noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
-" }}}
+"" Language Server Protocol
+"" a basic set up for LanguageClient-Neovim
+"" << LSP >> {{{
+"let g:LanguageClient_autoStart = 0
+"nnoremap <leader>lcs :LanguageClientStart<CR>
+"" if you want it to turn on automatically
+"" let g:LanguageClient_autoStart = 1
+"
+"let g:LanguageClient_serverCommands = {
+"    \ 'python': ['pyls'],
+"    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+"    \ 'go': ['go-langserver'] }
+"
+"
+"noremap <silent> H :call LanguageClient_textDocument_hover()<CR>
+"noremap <silent> Z :call LanguageClient_textDocument_definition()<CR>
+"noremap <silent> R :call LanguageClient_textDocument_rename()<CR>
+"noremap <silent> S :call LanugageClient_textDocument_documentSymbol()<CR>
+"" }}}
 
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
@@ -593,6 +602,7 @@ if !has('nvim')
     "let g:completor_auto_trigger = 0
     "inoremap <expr> <Tab> pumvisible() ? "<C-N>" : "<C-R>=completor#do('complete')<CR>"
 endif
+let g:completor_python_binary = '/Users/baihe/.pyenv/shims/python'
 
 " CtrlP ------------------------------
 
@@ -661,8 +671,6 @@ au FileType go nmap <leader>c <Plug>(go-coverage)
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
-
-nmap <F8> :TagbarToggle<CR>
 let g:tagbar_type_go = {
     \ 'ctagstype' : 'go',
     \ 'kinds'     : [
@@ -690,3 +698,4 @@ let g:tagbar_type_go = {
     \ 'ctagsbin'  : 'gotags',
     \ 'ctagsargs' : '-sort -silent'
 \ }
+
