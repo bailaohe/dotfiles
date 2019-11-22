@@ -54,6 +54,9 @@ Plug 'morhetz/gruvbox'
 " Better file browser
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 
+" One key commenter
+Plug 'scrooloose/nerdcommenter'
+
 " Class/module browser
 Plug 'majutsushi/tagbar'
 
@@ -93,6 +96,11 @@ endif
 
 " The ack grep utility
 Plug 'mileszs/ack.vim'
+
+" The identline display utility
+Plug 'Yggdroot/indentLine'
+
+" Plug 'davidhalter/jedi-vim'
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -542,7 +550,6 @@ nmap <leader>O :TagbarToggle<CR>
 let g:tagbar_autofocus = 1
 
 " NERDTree -----------------------------
-
 " General properties
 let NERDTreeDirArrows=1
 let NERDTreeMinimalUI=1
@@ -556,6 +563,13 @@ let NERDTreeAutoCenter = 1
 
 "" Open NERDTree on startup, when no file has been specified
 " autocmd VimEnter * NERDTree
+function! StartUp()
+    if 0 == argc()
+        NERDTree
+    end
+endfunction
+
+autocmd VimEnter * call StartUp()
 
 " Locate file in hierarchy quickly
 map <leader>T :NERDTreeFind<cr>
@@ -565,6 +579,31 @@ nmap <leader>o :NERDTreeToggle<cr>
 
 " toggle nerdtree display
 map <F3> :NERDTreeToggle<CR>
+
+" nerdcommenter --------------------------
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
 
 " Airline ------------------------------
 
@@ -638,6 +677,10 @@ let g:ctrlp_custom_ignore = {
   \ 'dir':  '\v[\/](\.git|\.hg|\.svn|node_modules)$',
   \ 'file': '\.pyc$\|\.pyo$',
   \ }
+
+" identline
+let g:indentLine_char='┆'
+let g:indentLine_enabled = 1
 
 " RustLang -----------------------------
 " automatic rustfmt on save
