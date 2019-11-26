@@ -1,24 +1,47 @@
-# Path to your oh-my-zsh installation.
-export ZSH=/Users/baihe/.oh-my-zsh
+# If you come from bash you might have to change your $PATH.
+# export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-# Optionally, if you set this to "random", it'll load a random theme each
-# time that oh-my-zsh is loaded.
-ZSH_THEME="jonathan"
+# Path to your oh-my-zsh installation.
+export ZSH="/Users/baihe/.oh-my-zsh"
+
+# Set name of the theme to load --- if set to "random", it will
+# load a random theme each time oh-my-zsh is loaded, in which case,
+# to know which specific one was loaded, run: echo $RANDOM_THEME
+# See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
+#ZSH_THEME="agnoster"
+ZSH_THEME="powerlevel9k/powerlevel9k"
+# command line 左邊想顯示的內容
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir dir_writable vcs) # <= left prompt 設了 "dir"、"vcs"
+# command line 右邊想顯示的內容
+POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status time) # <= right prompt 設了 "time"
+# 使用 nerd font 時可以顯示更多 icon
+POWERLEVEL9K_MODE='nerdfont-complete'
+
+# Set list of themes to pick from when loading at random
+# Setting this variable when ZSH_THEME=random will cause zsh to load
+# a theme from this variable instead of looking in ~/.oh-my-zsh/themes/
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
 
-# Uncomment the following line to use hyphen-insensitive completion. Case
-# sensitive completion must be off. _ and - will be interchangeable.
+# Uncomment the following line to use hyphen-insensitive completion.
+# Case-sensitive completion must be off. _ and - will be interchangeable.
 # HYPHEN_INSENSITIVE="true"
 
 # Uncomment the following line to disable bi-weekly auto-update checks.
 # DISABLE_AUTO_UPDATE="true"
 
+# Uncomment the following line to automatically update without prompting.
+# DISABLE_UPDATE_PROMPT="true"
+
 # Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13 
+# export UPDATE_ZSH_DAYS=13
+
+# Uncomment the following line if pasting URLs and other text is messed up.
+# DISABLE_MAGIC_FUNCTIONS=true
+
 # Uncomment the following line to disable colors in ls.
 # DISABLE_LS_COLORS="true"
 
@@ -32,34 +55,38 @@ ZSH_THEME="jonathan"
 # COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories # much, much faster.
+# under VCS as dirty. This makes repository status check for large repositories
+# much, much faster.
 # DISABLE_UNTRACKED_FILES_DIRTY="true"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
-# The optional three formats: "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# You can set one of the optional three formats:
+# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+# or set a custom format using the strftime function format specifications,
+# see 'man strftime' for details.
 # HIST_STAMPS="mm/dd/yyyy"
 
 # Would you like to use another custom folder than $ZSH/custom?
 # ZSH_CUSTOM=/path/to/new-custom-folder
 
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
+# Which plugins would you like to load?
+# Standard plugins can be found in ~/.oh-my-zsh/plugins/*
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git autojump mvn gradle brew github python pip virtualenv zsh-syntax-highlighting mysql brew)
-
-# User configuration
-export PATH="/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/sbin:/opt/X11/bin:/usr/local/go/bin:/usr/texbin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/usr/local/Cellar/subversion/1.8.5/bin"
-# export MANPATH="/usr/local/man:$MANPATH"
-export PATH=$PATH:"/Users/baihe/.cargo/bin"
-export PATH=$PATH:"/usr/local/openresty/nginx/sbin"
-
-export RUST_SRC_PATH="/usr/local/src/rust/src"
+plugins=(
+	git
+    autojump
+	zsh-autosuggestions
+	zsh-syntax-highlighting
+)
 
 source $ZSH/oh-my-zsh.sh
 
-export EDITOR=vim
+# User configuration
+
+# export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
@@ -74,9 +101,6 @@ export EDITOR=vim
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# ssh
-# export SSH_KEY_PATH="~/.ssh/dsa_id"
-
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
 # users are encouraged to define aliases within the ZSH_CUSTOM folder.
@@ -84,44 +108,69 @@ export EDITOR=vim
 #
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"                                                                                                                    
-#
+# alias ohmyzsh="mate ~/.oh-my-zsh"
 
-#alias ssh_prod_rancher='ssh -l root prod-front'
-#alias ssh_prod_jenkins2='ssh -l jenkins -i ~/.ssh/id_rsa_xiaomei jenkins2'
-#
+export LC_ALL=en_US.UTF-8
 
-alias brewski='brew update && brew upgrade && brew cleanup; brew doctor'
+eval "$(pyenv init -)"
+source ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-alias vimgo='vim -u ~/.vimrc.go'
-alias vim='nvim'
-alias vi='nvim'
+[[ -s "/Users/baihe/.gvm/scripts/gvm" ]] && source "/Users/baihe/.gvm/scripts/gvm"
 
-export ANDROID_HOME=/Users/baihe/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/platform-tools
+# xiaomai alias
+alias xmdev-redis="redis-cli -h dev01.xiaomai5.com -a Xh6T7guJ3fb5DAac"
+alias xmrc-redis="redis-cli -h rc.xiaomai5.com -a cb58ac8cbe"
+alias xmprod-redis-biz="redis-cli -h r-bp1ad993ec9d2b64pd.redis.rds.aliyuncs.com -a QYeR67oWBTdMqW"
+alias xmprod-redis-session="redis-cli -h r-bp17773ec3738db4pd.redis.rds.aliyuncs.com -a gXhtQwEaw3xCf8"
 
-export GOPATH=/Users/baihe/project/gopath
+alias java-debug="java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=localhost:5005"
+
+alias proxy="
+   export http_proxy=socks5://localhost:1086/;
+   export https_proxy=socks5://localhost:1086/;
+   export all_proxy=socks5://localhost:1086/;
+   export no_proxy=localhost,127.0.0.0/8,::1;
+   export HTTP_PROXY=socks5://localhost:1086/;
+   export HTTPS_PROXY=socks5://localhost:1086/;
+   export ALL_PROXY=socks5://localhost:1086/;
+   export NO_PROXY=localhost,127.0.0.0/8,::1"
+alias unproxy="
+   unset http_proxy;
+   unset https_proxy;
+   unset all_proxy;
+   unset no_proxy;
+   unset HTTP_PROXY;
+   unset HTTPS_PROXY;
+   unset ALL_PROXY;
+   unset NO_PROXY"
+
+alias vim="nvim"
+
+export GOROOT=/usr/local/go
+export GOPATH=/Users/baihe/go
 export GOBIN=$GOPATH/bin
-export PATH=$GOBIN:$PATH
 
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+export PATH=/Users/baihe/.scripts:$GOBIN:$PATH
 
+source <(kubectl completion zsh)
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+eval export PATH="/Users/baihe/.jenv/shims:${PATH}"
+export JENV_SHELL=zsh
+export JENV_LOADED=1
+unset JAVA_HOME
+source '/usr/local/Cellar/jenv/0.5.2/libexec/libexec/../completions/jenv.zsh'
+jenv rehash 2>/dev/null
+jenv() {
+  typeset command
+  command="$1"
+  if [ "$#" -gt 0 ]; then
+    shift
+  fi
 
-#alias tree='exa -T'
-alias ls='exa -lFh --git --time-style long-iso'
-
-PATH=/Users/baihe/.Pokemon-Terminal:$PATH
-
-#/Users/baihe/.pyenv/shims:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/go/bin:/usr/texbin:/Library/Frameworks/Python.framework/Versions/2.7/bin:/opt/local/bin:/opt/local/sbin:/usr/local/Cellar/subversion/1.8.5/bin:/Users/baihe/.cargo/bin:/usr/local/openresty/nginx/sbin:/Users/baihe/Library/Android/sdk/tools:/Users/baihe/Library/Android/sdk/platform-tools:/Users/baihe/.fzf/bin
-pokemon
-
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-export IDEA_JDK=$JAVA_HOME
-
-export CLASSPATH=".:/usr/local/lib/antlr-4.7.1-complete.jar:$CLASSPATH"
-alias antlr4='java -jar /usr/local/lib/antlr-4.7.1-complete.jar'
-alias grun='java org.antlr.v4.gui.TestRig'
-
+  case "$command" in
+  enable-plugin|rehash|shell|shell-options)
+    eval `jenv "sh-$command" "$@"`;;
+  *)
+    command jenv "$command" "$@";;
+  esac
+}
