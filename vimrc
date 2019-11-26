@@ -101,6 +101,19 @@ Plug 'mileszs/ack.vim'
 Plug 'Yggdroot/indentLine'
 
 " Plug 'davidhalter/jedi-vim'
+Plug 'heavenshell/vim-pydocstring'
+
+" A solid language pack
+Plug 'sheerun/vim-polyglot'
+
+" Git diff in gutter
+" Plug 'airblade/vim-gitgutter'
+
+if has('nvim') || has('patch-8.0.902')
+  Plug 'mhinz/vim-signify'
+else
+  Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+endif
 
 " Tell vim-plug we finished declaring plugins, so it can load them
 call plug#end()
@@ -289,6 +302,8 @@ set softtabstop=4
 "autocmd FileType html setlocal shiftwidth=4 tabstop=4 softtabstop=4
 "autocmd FileType htmldjango setlocal shiftwidth=4 tabstop=4 softtabstop=4
 "autocmd FileType javascript setlocal shiftwidth=4 tabstop=4 softtabstop=4
+
+autocmd FileType python setlocal tabstop=4 shiftwidth=4 softtabstop=4 expandtab
 
 " Round indent to multiple of 'shiftwidth' for > and < commands
 set shiftround
@@ -681,6 +696,10 @@ let g:ctrlp_custom_ignore = {
 " identline
 let g:indentLine_char='┆'
 let g:indentLine_enabled = 1
+
+" vim-signify
+" default updatetime 4000ms is not good for async update
+set updatetime=100
 
 " RustLang -----------------------------
 " automatic rustfmt on save
